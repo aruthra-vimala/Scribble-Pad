@@ -1,20 +1,3 @@
-/*
-const video = document.getElementById('video');
-const output = document.getElementById('output');
-navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-        video.srcObject = stream;
-    })
-    .catch(error => {
-        console.error('Error accessing media devices.', error);
-    });
-const recognizeASL = async () => {
-    setInterval(() => {
-        output.innerText = "Detected Sign: Hello";  // Replace with actual detected sign
-    }, 2000);
-};
-recognizeASL();
-*/
 const video = document.getElementById('video');
 const output = document.getElementById('output');
 navigator.mediaDevices.getUserMedia({ video: true })
@@ -36,9 +19,24 @@ const detectHandGestures = async (model) => {
         const predictions = await model.estimateHands(video);
         if (predictions.length > 0) {
             const hand = predictions[0];
-            output.innerText = `Detected hand with confidence: ${hand.handInViewConfidence}`;
+            output.innerText = recognizeGesture(hand.landmarks);
         }
         await tf.nextFrame();
+    }
+};
+const recognizeGesture = (landmarks) => {
+    const thumbTip = landmarks[4];
+    const indexTip = landmarks[8];
+    const middleTip = landmarks[12];
+    const ringTip = landmarks[16];
+    const pinkyTip = landmarks[20];
+    if (thumbTip[1] < indexTip[1] && 
+        thumbTip[1] < middleTip[1] && 
+        thumbTip[1] < ringTip[1] && 
+        thumbTip[1] < pinkyTip[1]) {
+        return "Thumbs Up!";
+    } else {
+        return "Gesture not recognized";
     }
 };
 loadHandposeModel();
