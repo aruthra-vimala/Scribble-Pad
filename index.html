@@ -1,20 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
     <meta charset="UTF-8">
     <title>ASL to Text Converter</title>
     <style>
+        body {
+            background-image: url('image.jpg'); /* Replace with the path to your background image */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7); 
+            padding: 20px;
+            border-radius: 10px;
+            width: 360px;
+        }
         video {
-            border: 1px solid black;
+            width: 100%;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        h1 {
+            font-size: 24px;
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
 <body>
-    <h1>ASL to Text Converter</h1>
-    <video id="video" width="320" height="240" autoplay></video>
-    <div id="output"></div>
+    <div class="container">
+        <h1>ASL to Text Converter</h1>
+        <video id="video" width="320" height="240" autoplay></video>
+        <div id="output">Gesture: <span id="gesture-text">Loading...</span></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
     <script src="index.js"></script>
 </body>
 </html>
