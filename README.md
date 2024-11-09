@@ -25,12 +25,17 @@ To run ASL Connect locally, follow these steps:
 `open index.html`
 
 # Usage
+
 Start Translation: Allow access to your webcam and start making ASL gestures in front of the camera.
+
 Recognized Gestures: The recognized gesture will be displayed as text on the screen.
+
 Supported Gestures: Currently supports gestures like “Thumbs Up” and “Peace”. More gestures are being added by updating the gesture recognition logic.
 
 # Acknowledgements
+
 TensorFlow.js for the handpose model.
+
 GitHub Pages for hosting the demo.
 
 # Contact
