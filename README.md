@@ -9,19 +9,20 @@ User-friendly Interface: Simple and intuitive interface for easy use.
 
 # Demo
 You can try out ASL Connect here.
+
 https://aruthra-vimala.github.io/Scribble-Pad/
 
 # Installation
 To run ASL Connect locally, follow these steps:
 
 ## Clone the repository:
-git clone https://github.com/aruthra-vimala/ASL-Connect.git
+'git clone https://github.com/aruthra-vimala/ASL-Connect.git'
 
 ## Navigate to the project directory:
-cd ASL-Connect
+'cd ASL-Connect'
 
 ## Open index.html in your web browser:
-open index.html
+'open index.html'
 
 # Usage
 Start Translation: Allow access to your webcam and start making ASL gestures in front of the camera.
