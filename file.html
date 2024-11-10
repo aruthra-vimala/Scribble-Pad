@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ASL Connect - Train Model</title>
+    <title>ASL Learning Game</title>
     <style>
         body {
             display: flex;
@@ -12,15 +12,28 @@
             height: 100vh;
             font-family: Arial, sans-serif;
         }
-        canvas {
+        #video, #canvas {
             border: 1px solid black;
+            margin-top: 10px;
+        }
+        #target {
+            font-size: 48px;
+            margin-top: 20px;
+        }
+        #score {
+            font-size: 24px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>ASL Connect - Train Model</h1>
-    <button id="train-button">Train Model</button>
+    <h1>ASL Learning Game</h1>
+    <video id="video" width="320" height="240" autoplay></video>
+    <canvas id="canvas" width="320" height="240"></canvas>
+    <div id="target">A</div>
+    <div id="score">Score: 0</div>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="train.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
+    <script src="game.js"></script>
 </body>
 </html>
