@@ -1,64 +1,105 @@
+// Load TensorFlow.js library
+const tfjsScript = document.createElement('script');
+tfjsScript.src = "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.9.0";
+document.head.appendChild(tfjsScript);
+
+tfjsScript.onload = () => {
+    // Once the TensorFlow.js library is loaded, initialize the app
+    initializeApp();
+};
+
+function initializeApp() {
+    // Create elements dynamically
+    document.title = "Live Harassment Detection";
+
+    // Create a heading
+    const heading = document.createElement('h1');
+    heading.innerText = "Live Harassment Detection";
+    document.body.appendChild(heading);
+
+    // Create video element for webcam feed
+    const videoElement = document.createElement('video');
+    videoElement.id = 'video';
+    videoElement.width = 640;
+    videoElement.height = 480;
+    videoElement.autoplay = true;
+    document.body.appendChild(videoElement);
+
+    // Create a status message paragraph
+    const statusElement = document.createElement('p');
+    statusElement.id = 'status';
+    statusElement.innerText = "Loading model...";
+    document.body.appendChild(statusElement);
+
+    // Create a button to start detection
+    const button = document.createElement('button');
+    button.innerText = "Start Detection";
+    button.onclick = startDetection;
+    document.body.appendChild(button);
+
+    // Initialize the webcam and model
+    loadModel();
+    setupWebcam(videoElement);
+}
+
 let model;
-const videoElement = document.getElementById('video');
-const statusElement = document.getElementById('status');
-
-// Function to set up webcam streaming
-async function setupWebcam() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    videoElement.srcObject = stream;
-    return new Promise((resolve) => {
-        videoElement.onloadedmetadata = () => {
-            resolve();
-        };
-    });
-}
-
-// Function to load the MobileNet model
 async function loadModel() {
-    model = await mobilenet.load();
-    statusElement.innerText = "Model loaded. Click 'Start Detection'";
+    try {
+        // Load the model from a local file (replace with the actual path if necessary)
+        model = await tf.loadLayersModel('file://path/to/your/model/model.json');
+        document.getElementById('status').innerText = "Model loaded. Click 'Start Detection'";
+    } catch (error) {
+        document.getElementById('status').innerText = "Error loading model";
+        console.error("Could not load the model:", error);
+    }
 }
 
-// Function to start live detection
+async function setupWebcam(videoElement) {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        videoElement.srcObject = stream;
+        await new Promise((resolve) => {
+            videoElement.onloadedmetadata = () => {
+                resolve();
+            };
+        });
+    } catch (error) {
+        console.error("Error accessing the webcam:", error);
+    }
+}
+
 async function startDetection() {
     if (!model) {
         alert("Model not loaded. Please wait.");
         return;
     }
-    statusElement.innerText = "Starting detection...";
+    document.getElementById('status').innerText = "Starting detection...";
     detectFrame();
 }
 
-// Function to detect objects in each video frame
 async function detectFrame() {
-    const predictions = await model.classify(videoElement);
-    const harassmentDetected = predictions.some(
-        (prediction) => prediction.className === "person" && prediction.probability > 0.8
+    const videoElement = document.getElementById('video');
+    const predictions = await model.predict(
+        tf.browser.fromPixels(videoElement).resizeNearestNeighbor([224, 224]).expandDims(0).toFloat()
     );
+    const harassmentDetected = predictions.dataSync()[1] > 0.8; // Adjust this based on model output
 
     if (harassmentDetected) {
         sendSosMessage();
     }
 
-    requestAnimationFrame(detectFrame); // Continue detection
+    requestAnimationFrame(detectFrame); // Continue detection loop
 }
 
-// Function to send SOS message with location details
 async function sendSosMessage() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
             const { latitude, longitude } = position.coords;
-            const message = `SOS Alert! Potential harassment detected. Location: Latitude ${latitude}, Longitude ${longitude}`;
+            const message = `SOS Alert! Potential harassment detected. Location: ${latitude}, ${longitude}`;
             alert(message); // Alert the user
-
-            // Open WhatsApp web with pre-filled message
             window.open(`https://wa.me/YOUR_PHONE_NUMBER?text=${encodeURIComponent(message)}`);
         });
     } else {
-        alert("Geolocation is not supported by your browser.");
+        alert("Geolocation not supported by your browser.");
     }
 }
-
-// Initialize the model and webcam
-loadModel();
-setupWebcam();
