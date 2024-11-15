@@ -28,9 +28,9 @@ async function detectGesture(model) {
 
         // Basic gesture recognition logic (for demonstration)
         if (isFist(landmarks)) {
-            gestureText.innerText = "Detected: Fist (e.g., 'A' in ASL)";
+            gestureText.innerText = "Detected: 'A' in ASL";
         } else if (isOpenHand(landmarks)) {
-            gestureText.innerText = "Detected: Open Hand (e.g., 'B' in ASL)";
+            gestureText.innerText = "Detected: 'B' in ASL";
         } else {
             gestureText.innerText = "Gesture not recognized";
         }
